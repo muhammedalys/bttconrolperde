@@ -1,0 +1,63 @@
+// ***** MUHAMMED ALİ ÖZEN *****
+ 
+char dataIn = 'D'; // Durma fonksiyonu için karakter
+int sagmotor = 4; // sag motorumuzun bağlantı pini
+int solmotor = 3; //sol motorumuzun bağlantı pini
+
+char determinant; //Program döngüsü için karakter
+char det; //Program döngüsü için karakter
+ 
+void setup()
+{
+pinMode(sagmotor, OUTPUT); // Motorlarımızı Çıkış pinleri olarak belirliyoruz.
+pinMode(solmotor, OUTPUT);
+
+
+}
+ 
+void loop()
+{
+det = check(); // determinantı kontrol et
+while (det == 'W') //İLERİ
+{
+digitalWrite(sagmotor, HIGH); // ileri butonuna bastığımızda sag motoru çalıştırıyoruz
+det = check();
+}
+while (det == 'S') //GERİ
+{
+digitalWrite(solmotor, HIGH); // geri butonuna bastığımızda sol motoru çalıştırıyoruz
+
+det = check();
+}
+while (det == 'D') //Telefondaki programda atanmış olan durma fonksiyonun harf eşdeğeri
+{
+digitalWrite(sagmotor, LOW);
+digitalWrite(solmotor, LOW);
+
+det = check();
+}
+ 
+}
+ 
+int check()
+{
+if (Serial.available() > 0) //Serial portun kontrollü
+{
+dataIn = Serial.read(); //Telefondan gelen verilerin kontrollü
+if (dataIn == 'W') //Telefondan gelen verileri eşleştiriyoruz
+{
+determinant = 'W';
+}
+else if (dataIn == 'S')
+{
+determinant = 'S';
+}
+
+else if (dataIn == 'D')
+{
+determinant = 'D';
+}
+ 
+}
+return determinant; //determinantın tekrar etmesini sağlıyoruz
+}
